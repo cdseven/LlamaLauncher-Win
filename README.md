@@ -26,8 +26,8 @@ That's it. No Python installation required. No manual llama.cpp setup required.
 
 ## Installation
 
-1. Download `launcher.exe` from the [Releases](../../releases) page.
-2. Place it in its own folder (recommended for portability).
+1. Download `LlamaLauncher-Win.zip` from the [Releases](../../releases) page.
+2. Extract the zip file and navigate into the LlamaLauncher folder.
 3. Run `launcher.exe`.
 
 ---

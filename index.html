@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Llama Launcher</title>
+    <link rel="stylesheet" href="styles/en0.css">
+</head>
+
+<body>
+
+    <h1 id="appTitle">Llama Launcher</h1>
+
+    <div id="sysInfo">
+        <div id="vramRow">VRAM: <span id="vramInfo">-</span></div>
+        <div id="ramRow">RAM: <span id="ramInfo">-</span></div>
+    </div>
+
+    <div id="paths">
+        <div id="modelsPathRow">Models: <span id="modelsPath">Loading...</span> <button
+                onclick="browsePath('models')">Browse...</button>
+            <button onclick="resetPath('models')">Reset</button>
+            <button class="info-btn" onclick="openHelp('models-path')" title="">?</button>
+            <button onclick="downloadModel()">Download</button>
+        </div>
+        <div id="binPathRow">Bin: <span id="binPath">Loading...</span> <button
+                onclick="browsePath('bin')">Browse...</button>
+            <button onclick="resetPath('bin')">Reset</button>
+            <button class="info-btn" onclick="openHelp('bin-path')" title="">?</button>
+            <button onclick="downloadBin()">Download</button>
+        </div>
+    </div>
+
+    <div id="modelRow" class="form-row">
+        <label for="modelSelect">Model to use:</label>
+        <select id="modelSelect"></select>
+        <button class="info-btn" onclick="openHelp('model')" title="">?</button>
+        <button onclick="populateModels()">Refresh</button>
+    </div>
+
+    <div id="ctxRow" class="form-row">
+        <label for="ctxSelect">Context Window:</label>
+        <select id="ctxSelect" onchange="saveCtx()">
+            <option value="16384">16K</option>
+            <option value="32768">32K</option>
+            <option value="65536">64K</option>
+        </select>
+        <button class="info-btn" onclick="openHelp('ctx')" title="">?</button>
+    </div>
+
+    <div id="extendedRangeRow" class="form-row">
+        <label id="extendedRangeAddLabel">Add</label>
+        <input type="checkbox" id="extendedRange" onchange="updateCtxOptions()" />
+        <label id="extendedRangeLabel" for="extendedRange">More context sizes</label>
+        <button class="info-btn" onclick="openHelp('extended-range')" title="">?</button>
+    </div>
+
+    <div id="cotRow" class="form-row">
+        <label>Disable thinking / CoT:</label>
+        <input type="checkbox" id="disableCotTemplate" onchange="saveCot()" checked />
+        <label id="cotTemplateLabel" for="disableCotTemplate">by Chat Template</label>
+        <input type="checkbox" id="disableCotOverride" onchange="saveCot()" />
+        <label id="cotOverrideLabel" for="disableCotOverride">by forced override</label>
+        <button class="info-btn" onclick="openHelp('cot')" title="">?</button>
+    </div>
+
+    <details id="extrasSection">
+        <summary id="extrasSummary">Extras</summary>
+        <div id="extrasContent">
+            <div id="jinjaRow" class="form-row">
+                <label for="jinjaCheck">Jinja:</label>
+                <input type="checkbox" id="jinjaCheck" checked disabled />
+                <button class="info-btn" onclick="openHelp('jinja')" title="">?</button>
+            </div>
+            <div id="flashAttnRow" class="form-row">
+                <label for="flashAttnCheck">Flash attn:</label>
+                <input type="checkbox" id="flashAttnCheck" checked disabled />
+                <button class="info-btn" onclick="openHelp('flash-attn')" title="">?</button>
+            </div>
+        </div>
+    </details>
+
+    <div id="backendRow" class="form-row">
+        <label>Backend:</label>
+        <input type="radio" name="backend" id="backendServer" value="server" checked />
+        <label id="backendServerLabel" for="backendServer">llama-server</label>
+        <input type="radio" name="backend" id="backendCli" value="cli" />
+        <label id="backendCliLabel" for="backendCli">llama-cli</label>
+        <button class="info-btn" onclick="openHelp('backend')" title="">?</button>
+    </div>
+
+    <div id="portShiftRow" class="form-row">
+        <label for="portShift">Port Shift:</label>
+        <input type="checkbox" id="portShift" onchange="addRemoveOption('--port 8081', this.checked)" />
+        <label id="portShiftLabel" for="portShift">for local OpenWebUI</label>
+        <button class="info-btn" onclick="openHelp('port-shift')" title="">?</button>
+    </div>
+
+    <div id="stopOnExitRow" class="form-row">
+        <label for="stopOnExit">Stop on exit:</label>
+        <input type="checkbox" id="stopOnExit" checked onchange="updateStopOnExit()" />
+        <button class="info-btn" onclick="openHelp('stop-on-exit')" title="">?</button>
+    </div>
+
+    <div id="customArgsRow" class="form-row">
+        <label for="customArgs">Custom Args:</label>
+        <input type="text" id="customArgs" placeholder="e.g. --threads 8 --temp 0.7">
+        <button class="info-btn" onclick="openHelp('custom-args')" title="">?</button>
+    </div>
+
+    <div id="launchRow">
+        <button id="launchBtn" onclick="launch()">Launch</button>
+    </div>
+
+    <textarea id="output" readonly>Detecting system memory, please wait...</textarea>
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

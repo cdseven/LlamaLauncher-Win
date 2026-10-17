@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Download Bin</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 24px 32px;
+            margin: 0;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .page-sub {
+            font-size: 12px;
+            color: #888;
+            margin: 0 0 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-heading {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 6px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 5px 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 9px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: 500;
+            color: #222;
+            white-space: nowrap;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 3px;
+            margin-left: 7px;
+            vertical-align: middle;
+            background: #e6f4ea;
+            color: #2d7a3a;
+            letter-spacing: 0.02em;
+        }
+
+        .notes {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .dl-btn {
+            padding: 5px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+        }
+
+        .dl-btn:hover {
+            background: #f5f5f5;
+            border-color: #888;
+        }
+
+        .dl-btn:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        #status {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #666;
+            min-height: 18px;
+        }
+
+        .loading {
+            color: #999;
+            font-size: 13px;
+            padding: 8px 0;
+        }
+
+        .error {
+            color: #c0392b;
+            font-size: 13px;
+            padding: 8px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Download llama.cpp binaries</h2>
+    <p class="page-sub">Latest release fetched from GitHub. Choose the package that matches your hardware.</p>
+
+    <div id="content">
+        <p class="loading">Fetching latest release from GitHub...</p>
+    </div>
+    <div id="status"></div>
+
+    <script>
+        const SECTIONS = [
+            {
+                heading: 'Nvidia GPU',
+                rows: [
+                    {
+                        label: 'CUDA 13',
+                        badge: 'Recommended',
+                        notes: 'Includes runtime DLLs — works even without up-to-date drivers installed.',
+                        pattern: /^cudart-llama-bin-win-cuda-13[\d.]+-x64\.zip$/,
+                    },
+                    {
+                        label: 'CUDA 13 minimal',
+                        badge: null,
+                        notes: 'Smaller download. Requires CUDA drivers already installed on your system.',
+                        pattern: /^llama-b\d+-bin-win-cuda-13[\d.]+-x64\.zip$/,
+                    },
+                ]
+            },
+            {
+                heading: 'AMD GPU',
+                rows: [
+                    {
+                        label: 'HIP',
+                        badge: null,
+                        notes: 'For AMD Radeon GPUs.',
+                        pattern: /^llama-b\d+-bin-win-hip-radeon-x64\.zip$/,
+                    },
+                ]
+            },
+            {
+                heading: 'Intel Arc GPU',
+                rows: [
+                    {
+                        label: 'SYCL',
+                        badge: null,
+                        notes: 'For Intel Arc discrete GPUs.',
+                        pattern: /^llama-b\d+-bin-win-sycl-x64\.zip$/,
+                    },
+                ]
+            },
+            {
+                heading: 'CPU only / Vulkan / Unknown',
+                rows: [
+                    {
+                        label: 'Vulkan',
+                        badge: null,
+                        notes: 'Works on most hardware including Nvidia, AMD, and Intel. Safe choice if unsure.',
+                        pattern: /^llama-b\d+-bin-win-vulkan-x64\.zip$/,
+                    },
+                ]
+            },
+        ];
+
+        async function init() {
+            const content = document.getElementById('content');
+            let assets = [];
+
+            try {
+                const response = await fetch('https://api.github.com/repos/ggml-org/llama.cpp/releases/latest');
+                const data = await response.json();
+                assets = data.assets || [];
+            } catch (e) {
+                content.innerHTML = '<p class="error">Failed to fetch release info from GitHub.</p>';
+                console.error(e);
+                return;
+            }
+
+            const html = SECTIONS.map(section => {
+                const rows = section.rows.map(row => {
+                    const asset = assets.find(a => row.pattern.test(a.name));
+                    if (!asset) return '';
+                    const sizeMb = (asset.size / (1024 * 1024)).toFixed(0);
+                    const badge = row.badge
+                        ? `<span class="badge">${row.badge}</span>`
+                        : '';
+                    return `
+                        <tr>
+                            <td><span class="label">${row.label}</span>${badge}</td>
+                            <td class="notes">${row.notes} <span style="color:#aaa">(${sizeMb} MB)</span></td>
+                            <td style="text-align:right"><button class="dl-btn" onclick="startDownload('${asset.browser_download_url}', '${asset.name}', this)">Download</button></td>
+                        </tr>`;
+                }).join('');
+
+                if (!rows.trim()) return '';
+
+                return `
+                    <div class="section">
+                        <div class="section-heading">${section.heading}</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:160px">Package</th>
+                                    <th>Notes</th>
+                                    <th style="width:90px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>`;
+            }).join('');
+
+            content.innerHTML = html || '<p class="error">No matching packages found in latest release.</p>';
+        }
+
+        async function startDownload(url, filename, btn) {
+            document.querySelectorAll('.dl-btn').forEach(b => b.disabled = true);
+            document.getElementById('status').textContent = `Starting download of ${filename}...`;
+            await window.pywebview.api.start_download_bin(url, filename);
+        }
+
+        window.addEventListener('pywebviewready', init);
+    </script>
+</body>
+
+</html>

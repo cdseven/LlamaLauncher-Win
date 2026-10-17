@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Llama Launcher Help</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 30px 40px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        h1 {
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 40px;
+            color: #333;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        :target {
+            animation: highlight 2s ease;
+        }
+        @keyframes highlight {
+            0% { background-color: #fff3a8; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Llama Launcher Help</h1>
+
+    <section id="model">
+        <h2>Model Selection</h2>
+        <p>Choose a <code>.gguf</code> model file from your configured models directory. Models are listed with their estimated parameter count and file size.</p>
+        <p>The parameter count is extracted from the filename (e.g. <code>7B</code>, <code>70B</code>).</p>
+    </section>
+
+    <section id="ctx">
+        <h2>Context Window</h2>
+        <p>Context as in "<b>Maximum Chat Length.</b>" The context window determines how many tokens the model can process at once. Larger contexts use more VRAM.</p>
+        <p>Enable <strong>"More context sizes"</strong> to access extended options from 4K up to 2M tokens. Be cautious with very large values as they require significant memory.</p>
+    </section>
+
+    <section id="extended-range">
+        <h2>More Context Sizes</h2>
+        <p>Expands the context window options to include additional options ranging from 4K to up to 2M tokens.</p>
+        <p>Larger conext window sizes require more memory. Slow inference or out-of-memory errors may result if excessively large values are used here.</p>
+    </section>
+
+    <section id="cot">
+        <h2>Disable Thinking / CoT</h2>
+        <p>Some models have a reasoning or "think" mode where the model talks to itself before generating the final
+            response. Small models can produce poor output as a result of this. Even larger models can be wasteful when the
+            <code>&lt;think&gt;</code> block is enabled. These two options are ways of skipping it.</p>
+
+        <p><strong>By Chat Template</strong> tells the model to skip the thinking phase using its own prompt template. This
+            is the preferred method and is sufficient when using llama-server. Adds
+            <code>--chat-template-kwargs '{"enable_thinking":false}'</code> to the command.</p>
+
+        <p><strong>By Forced Override</strong> suppresses thinking regardless of the template.
+            When using llama-cli this option may be needed for full suppression of the
+            <code>&lt;think&gt;</code> block. Adds <code>--reasoning-budget 0 --reasoning-format none</code> to the command.
+        </p>
+
+        <p>Leave both unchecked if you want to observe the model's reasoning process.</p>
+    </section>
+
+    <section id="jinja">
+        <h2>Jinja Templating</h2>
+        <p>Jinja is always enabled (<code>--jinja</code>). This allows <code>llama-server</code> to use the chat template embedded in the GGUF file for proper message formatting.</p>
+    </section>
+
+    <section id="flash-attn">
+        <h2>Flash Attention</h2>
+        <p>Flash attention is always enabled (<code>--flash-attn auto</code>). It accelerates inference and reduces VRAM usage on supported GPUs.</p>
+    </section>
+
+    <section id="stop-on-exit">
+        <h2>Stop on Exit</h2>
+        <p>When checked, closing Llama Launcher will automatically kill any running <code>llama-server.exe</code> process.</p>
+        <p>Uncheck this if you want the server to keep running after the launcher is closed.</p>
+    </section>
+
+	<section id="models-path">
+		<h2>Models Path</h2>
+		<p>The directory where your <code>.gguf</code> model files are stored.</p>
+		<p>Use <strong>Browse</strong> to change the path, or <strong>Reset</strong> to restore the default (<code>./models</code>). The path is saved in <code>ini.ini</code>.</p>
+	</section>
+
+	<section id="bin-path">
+		<h2>Bin Path</h2>
+		<p>The directory containing <code>llama-server.exe</code>.</p>
+		<p>Use <strong>Browse</strong> to change the path, or <strong>Reset</strong> to restore the default (<code>./bin</code>). The path is saved in <code>ini.ini</code>.</p>
+	</section>
+
+    <section id="backend">
+        <h2>Backend Selection</h2>
+        <p>Choose between <code>llama-server</code> and <code>llama-cli</code> backends:</p>
+        <ul>
+            <li><strong>llama-server</strong>: Runs a local API server that can be connected to by other applications or web interfaces</li>
+            <li><strong>llama-cli</strong>: Runs an interactive chat in a separate terminal window</li>
+        </ul>
+        <p>The server backend is typically used for applications that need to interface with models via API calls, while the CLI backend provides a direct chat interface in a separate terminal window.</p>
+    </section>
+
+    <section id="port-shift">
+        <h2>Port Shift</h2>
+        <p>When checked, <code>llama-server</code> will listen on port <code>8081</code> instead of the default
+            <code>8080</code>. Adds <code>--port 8081</code> to the command.</p>
+        <p>Maybe useful when running a local OpenWebUI instance, which may be using port 8080 by default.</p>
+    </section>
+
+    <section id="custom-args">
+        <h2>Custom Arguments</h2>
+        <p>Enter any additional command line arguments you want to pass to the llama executable. These are appended to the
+            end of the generated command.</p>
+        <p>For example: <code>--threads 8</code>, <code>--temp 0.7</code>, <code>--gpu-layers 99</code></p>
+        <p>Be careful with this field — invalid or conflicting arguments may cause the launch to fail. Refer to the
+            <code>llama.cpp</code> documentation for available options.</p>
+    </section>
+
+
+</body>
+</html>

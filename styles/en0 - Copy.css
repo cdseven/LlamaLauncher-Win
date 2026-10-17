@@ -1,0 +1,122 @@
+/* Llama Launcher - en0.css */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 16px;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+}
+
+h1#appTitle {
+    font-size: 1.4em;
+    margin-bottom: 12px;
+}
+
+/* System info */
+#sysInfo {
+    margin-bottom: 10px;
+    color: #9cdcfe;
+}
+
+/* Paths */
+#paths {
+    margin-bottom: 10px;
+}
+
+#paths div {
+    margin-bottom: 4px;
+}
+
+#modelsPath,
+#binPath {
+    font-style: italic;
+    margin-right: 6px;
+}
+
+/* Form rows */
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.form-row label {
+    min-width: 160px;
+}
+
+/* Selects and text inputs */
+select,
+input[type="text"] {
+    background-color: #2d2d2d;
+    color: #d4d4d4;
+    border: 1px solid #555;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* Buttons */
+button {
+    background-color: #3a3a3a;
+    color: #d4d4d4;
+    border: 1px solid #555;
+    padding: 2px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #505050;
+}
+
+button.info-btn {
+    padding: 2px 5px;
+    font-size: 0.85em;
+    color: #9cdcfe;
+    border-color: #444;
+}
+
+/* Launch button */
+#launchBtn {
+    font-size: 1.1em;
+    padding: 6px 24px;
+    background-color: #0e639c;
+    border-color: #1177bb;
+    color: #ffffff;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#launchBtn:hover {
+    background-color: #1177bb;
+}
+
+/* Extras section */
+#extrasSection {
+    margin-bottom: 6px;
+}
+
+#extrasSummary {
+    cursor: pointer;
+    color: #9cdcfe;
+    margin-bottom: 4px;
+}
+
+/* Output textarea */
+#output {
+    width: 100%;
+    height: 160px;
+    background-color: #111;
+    color: #b5cea8;
+    border: 1px solid #444;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 6px;
+    resize: vertical;
+    border-radius: 3px;
+}

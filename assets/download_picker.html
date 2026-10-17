@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Download Model</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 24px 32px;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        .model-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .model-label {
+            width: 180px;
+            font-weight: bold;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .model-name {
+            flex: 1;
+            font-size: 13px;
+            color: #222;
+            word-break: break-all;
+        }
+
+        .model-size {
+            width: 52px;
+            font-size: 12px;
+            color: #888;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .dl-btn {
+        padding: 4px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        flex-shrink: 0;
+        }
+
+        .dl-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        #status {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #666;
+            min-height: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Select a model to download:</h2>
+
+    <div id="modelList">Loading...</div>
+    <div id="status"></div>
+
+    <script>
+        const MODELS = [
+            { key: 'QwenXS', label: 'Tiny<br><small>&nbsp;&nbsp;CPU only', size: '~2 GB', urlKey: 'QwenXS-url' },
+            { key: 'QwenS', label: 'Small<br><small>&nbsp;&nbsp;8GB GPU', size: '~6 GB', urlKey: 'QwenS-url' },
+            { key: 'QwenM', label: 'Mid<br><small>&nbsp;&nbsp;24+GB VRAM', size: '~18 GB', urlKey: 'QwenM-url' },
+        ];
+
+        async function init() {
+            const response = await fetch('extras.json');
+            const data = await response.json();
+
+            const list = document.getElementById('modelList');
+            list.innerHTML = '';
+
+            MODELS.forEach(m => {
+                const url = data[m.urlKey];
+                if (!url) return;
+                const filename = url.split('/').pop();
+
+                const row = document.createElement('div');
+                row.className = 'model-row';
+
+                const lbl = document.createElement('span');
+                lbl.className = 'model-label';
+                lbl.innerHTML = m.label;
+
+                const name = document.createElement('span');
+                name.className = 'model-name';
+                name.textContent = filename;
+
+                const size = document.createElement('span');
+                size.className = 'model-size';
+                size.textContent = m.size;
+
+                const btn = document.createElement('button');
+                btn.className = 'dl-btn';
+                btn.textContent = 'Download';
+                btn.onclick = () => startDownload(url, filename, btn);
+
+                row.appendChild(lbl);
+                row.appendChild(name);
+                row.appendChild(size);
+                row.appendChild(btn);
+                list.appendChild(row);
+            });
+        }
+
+        async function startDownload(url, filename, btn) {
+            document.querySelectorAll('.dl-btn').forEach(b => b.disabled = true);
+            document.getElementById('status').textContent = `Starting download of ${filename}...`;
+            await window.pywebview.api.start_download(url, filename);
+        }
+
+        window.addEventListener('pywebviewready', init);
+    </script>
+</body>
+
+</html>

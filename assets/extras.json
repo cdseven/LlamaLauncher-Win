@@ -1,0 +1,20 @@
+{
+  "qwen3-icon-url": "https://raw.githubusercontent.com/cdseven/LlamaLauncher-Win/main/tiny.gif",
+  "QwenXS-url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf",
+  "QwenS-url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/resolve/main/Qwen3.5-9B-Q5_K_S.gguf",
+  "QwenM-url": "https://huggingface.co/unsloth/Qwen3.5-27B-GGUF/resolve/main/Qwen3.5-27B-UD-Q5_K_XL.gguf",
+  "help-tooltips": {
+    "models-path": "Directory where your .gguf model files are stored",
+    "bin-path": "Directory containing llama-server.exe",
+    "model": "Choose which GGUF model file to load",
+    "ctx": "Set the context window size (how much text the model can see)",
+    "cot": "Disable chain-of-thought / thinking tokens for supported models",
+    "stop-on-exit": "Kill llama-server.exe when this launcher is closed",
+    "flash-attn": "Flash attention accelerates inference on supported GPUs",
+    "backend": "llama-server runs a local API server; llama-cli runs an interactive chat in the terminal",
+    "jinja": "Jinja templating enables chat template support",
+    "custom-args": "Append custom command line arguments to pass to the llama executable",
+    "port-shift": "Shifts the server port to 8081 for use with a local OpenWebUI instance",
+    "extended-range": "Show additional context size options including smaller and very large values"
+  }
+}

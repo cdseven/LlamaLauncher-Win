@@ -33,8 +33,8 @@ That's it. No Python installation required. No manual llama.cpp setup required.
 ---
 
 ## Usage
-Double-click `launcher.pyw` if running from source.
-Double-click `launcher.exe` to launch if running from the .zip release.
+Double-click `launcher.pyw` if running from source.  
+Double-click `launcher.exe` to launch if running from the .zip release.  
 
 The app may take a few seconds to start up on first run.
 It loads quicker if `nvidia-smi` has already been run since boot.

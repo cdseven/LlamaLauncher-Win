@@ -10,7 +10,7 @@ Got a gaming PC? A humble laptop? A supercomputer? Llama Launcher gives you a si
 
 Built on llama.cpp for efficient local text generation inference.
 
-Pair it with a feature-rich front-end like [Open WebUI](https://github.com/open-webui/open-webui) or [TypingMind](https://www.typingmind.com/) and the possibilities are endless — research, coding assistance, agentic workflows, plugins, and much more.
+Pair it with a feature-rich front-end like [Open WebUI](https://github.com/open-webui/open-webui) or [TypingMind](https://www.typingmind.com/) and the possibilities are endless — research, coding assistance, agentic workflows, plugins, and much more. 
 
 ---
 

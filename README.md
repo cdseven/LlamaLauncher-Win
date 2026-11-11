@@ -1,5 +1,9 @@
 # Llama Launcher
 
+> **Not currently maintained.** The llama.cpp auto-downloader is broken
+> (upstream changed). Should still work if you drop llama.cpp binaries into
+> the `bin` folder yourself.
+
 Run AI models locally on your own PC — no cloud, no subscription, no hassle.
 
 ---
